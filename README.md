@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/yandex-money/yandex-money-sdk-nodejs.svg?branch=master)](https://travis-ci.org/yandex-money/yandex-money-sdk-nodejs)
-[![Coverage Status](https://coveralls.io/repos/yandex-money/yandex-money-sdk-nodejs/badge.png?branch=master)](https://coveralls.io/r/yandex-money/yandex-money-sdk-nodejs?branch=master)
+[![Build Status](https://travis-ci.org/pjhl/yandex-money-sdk-ext.svg?branch=master)](https://travis-ci.org/pjhl/yandex-money-sdk-ext)
+[![Coverage Status](https://coveralls.io/repos/pjhl/yandex-money-sdk-ext/badge.png?branch=master)](https://coveralls.io/r/pjhl/yandex-money-sdk-ext?branch=master)
 
 # NodeJS Yandex.Money API SDK
 
