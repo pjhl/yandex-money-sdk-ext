@@ -67,7 +67,7 @@ when [register](https://sp-money.yandex.ru/myservices/new.xml) app in Yandex.Mon
     });
 
     // fetch last 3 records of operation history
-    api.operationHistory(function operationHisComplete(err, data) {
+    api.operationHistory({}, function operationHisComplete(err, data) {
         if(err) {
             // process error
         }
