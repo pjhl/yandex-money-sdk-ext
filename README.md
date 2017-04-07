@@ -16,7 +16,7 @@
 
 ### Installation
 
-Simply run `npm install yandex-money-sdk`
+Simply run `npm install yandex-money-sdk-ext`
 
 ### Payments from the Yandex.Money wallet
 
@@ -27,7 +27,7 @@ Note: `client_id`, `redirect_uri`, `client_secret` are constants that you get,
 when [register](https://sp-money.yandex.ru/myservices/new.xml) app in Yandex.Money API.
 
     ```javascript
-    var yandexMoney = require("yandex-money-sdk");
+    var yandexMoney = require("yandex-money-sdk-ext");
     // scope is array(e.g. scope = ['account-info', 'operation-history'])
     url = yandexMoney.Wallet.buildObtainTokenUrl(clientId, redirectURI, scope);
     // redirect user to url
