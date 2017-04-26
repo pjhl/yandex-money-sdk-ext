@@ -1,6 +1,6 @@
 {
   "name": "yandex-money-sdk-ext",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Forked SDK for yandex money API",
   "main": "lib/index.js",
   "scripts": {
