@@ -8,16 +8,16 @@ var clientId = constants.clientId;
 var Wallet = yandex_money.Wallet;
 var ExternalPayment = yandex_money.ExternalPayment;
 
-describe('Wallet', function(){
+describe('Wallet', function () {
   this.timeout(5000);
 
-  describe('#utils', function(){
-    it('should return auth url for browser redirect', function(){
+  describe('#utils', function () {
+    it('should return auth url for browser redirect', function () {
       var scope = ['account-info', 'operation-history'];
       var url = Wallet.buildObtainTokenUrl(clientId, "http://localhost:8000/redirect", scope);
     });
 
-    it("should exchange code to access token(fake)", function(done) {
+    it("should exchange code to access token(fake)", function (done) {
       Wallet.getAccessToken("client id", "code", "redirect uri", null,
         function (error, data, response) {
           assert.equal(response.statusCode, 200);
@@ -39,10 +39,9 @@ describe('Wallet', function(){
   describe("#operationHistory", function () {
     it("should return operation history", function (done) {
       var wallet = new Wallet(accessToken);
-      wallet.operationHistory({records: 3},
-          function myCallback(error, data, response) {
-        //console.log(data);
-        assert.equal(response.statusCode, 200);
+      wallet.operationHistory({records: 3}, (error, data, response) => {
+        assert.strictEqual(error, null);
+        assert.strictEqual(response.statusCode, 200);
         done();
       });
     });
@@ -52,12 +51,12 @@ describe('Wallet', function(){
     it("should return operation history(fake)", function (done) {
       var wallet = new Wallet(accessToken);
       wallet.operationDetails("some operation id",
-          function myCallback(error, data, response) {
-        //console.log(data);
-        // yandex api always returns 200 if request is correct
-        assert.equal(response.statusCode, 200);
-        done();
-      });
+        function myCallback(error, data, response) {
+          //console.log(data);
+          // yandex api always returns 200 if request is correct
+          assert.equal(response.statusCode, 200);
+          done();
+        });
     });
   });
 
@@ -81,7 +80,7 @@ describe('Wallet', function(){
           assert.equal(response.statusCode, 200);
           request_id = data.request_id;
           done();
-      });
+        });
     });
 
     it("should make a response payment", function (done) {
@@ -116,16 +115,18 @@ describe('Wallet', function(){
           done();
         });
     });
-    
+
   });
 });
 
 describe("External payment", function () {
+  this.timeout(5000);
+
   var request_id = null;
   var instance_id = null;
   describe("#getInstanceId", function () {
-    it("should get instance id", function(done) {
-      ExternalPayment.getInstanceId(clientId, function(error, data) {
+    it("should get instance id", function (done) {
+      ExternalPayment.getInstanceId(clientId, function (error, data) {
         assert.equal(data.status, "success");
         instance_id = data.instance_id;
         done();
@@ -134,7 +135,7 @@ describe("External payment", function () {
   });
 
   describe("#request", function () {
-    it("should make request external payment", function(done) {
+    it("should make request external payment", function (done) {
       var requestComplete = function (error, data, response) {
         assert.equal(response.statusCode, 200);
         request_id = data.request_id;
@@ -170,28 +171,28 @@ describe("External payment", function () {
         ext_auth_fail_uri: "http://localhost:8000"
       }, processComplete);
     });
-    
+
   });
 
   describe("#exceptions", function () {
     it("should return TokenError in Wallet.revokeToken", function (done) {
       var api = new Wallet("somemisspelledtoken");
       Wallet.revokeToken("somemisspelledtoken", null,
-          function myCallback (error) {
-        assert.equal(error.message, "Token error");
-        done();
-      });
+        function myCallback(error) {
+          assert.equal(error.message, "Token error");
+          done();
+        });
     });
 
     it("should return ScopeError", function (done) {
       var api = new Wallet("some invalid token");
-      api.accountInfo(function myCallback (error) {
+      api.accountInfo(function myCallback(error) {
         assert.equal(error.message, "Format error");
         done();
       });
     });
-    
+
   });
-  
+
 });
 
