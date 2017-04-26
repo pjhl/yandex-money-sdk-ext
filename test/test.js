@@ -1,20 +1,20 @@
-var assert = require("assert");
-var yandex_money = require("../index");
-var constants = require("./constants");
+const assert = require("assert");
+const yandex_money = require("../index");
+const constants = require("./constants");
 
-var accessToken = constants.accessToken;
-var clientId = constants.clientId;
+const accessToken = constants.accessToken;
+const clientId = constants.clientId;
 
-var Wallet = yandex_money.Wallet;
-var ExternalPayment = yandex_money.ExternalPayment;
+const Wallet = yandex_money.Wallet;
 
 describe('Wallet', function () {
   this.timeout(5000);
 
   describe('#utils', function () {
     it('should return auth url for browser redirect', function () {
-      var scope = ['account-info', 'operation-history'];
-      var url = Wallet.buildObtainTokenUrl(clientId, "http://localhost:8000/redirect", scope);
+      const wallet = new Wallet();
+      const scope = ['account-info', 'operation-history'];
+      const url = wallet.buildObtainTokenUrl(clientId, "http://localhost:8000/redirect", scope);
       assert(!!url);
     });
 
@@ -128,8 +128,11 @@ describe("External payment", function () {
   var instance_id = null;
   describe("#getInstanceId", function () {
     it("should get instance id", function (done) {
-      ExternalPayment.getInstanceId(clientId, function (error, data) {
-        assert.equal(data.status, "success");
+      var sdk = new Wallet();
+      sdk.getInstanceId(clientId, function (error, data) {
+        assert.strictEqual(error, null);
+        assert.strictEqual(data.status, "success");
+        assert(!!data.instance_id);
         instance_id = data.instance_id;
         done();
       });
@@ -138,42 +141,41 @@ describe("External payment", function () {
 
   describe("#request", function () {
     it("should make request external payment", function (done) {
-      var requestComplete = function (error, data, response) {
-        assert.equal(response.statusCode, 200);
-        request_id = data.request_id;
-        //assert.equal(data.request_id, "p2p-test");
-        // TODO: add assertion
-        done();
-      };
       var requestOptions = {
         "pattern_id": "p2p",
         "to": "410011161616877",
-        "amount_due": "0.02",
+        "amount_due": "0.01",
         "comment": "test payment comment from yandex-money-nodejs",
         "message": "test payment message from yandex-money-nodejs",
         "label": "testPayment",
       };
-      var api = new ExternalPayment(instance_id);
-      api.request(requestOptions, requestComplete);
+      var sdk = new Wallet();
+      sdk.requestExternalPayment(instance_id, requestOptions, (error, data, response) => {
+        assert.strictEqual(error, null);
+        assert.strictEqual(response.statusCode, 200);
+        assert.strictEqual(data.status, 'success');
+        assert(!!data.request_id);
+        request_id = data.request_id;
+        done();
+      });
     });
   });
 
   describe("#process", function () {
     it("should make a process payment", function (done) {
-      var api = new ExternalPayment(instance_id);
-      var processComplete = function (error, data, response) {
-        assert.equal(response.statusCode, 200);
-        assert.equal(data.status, "ext_auth_required");
-        done();
-
-      };
-      api.process({
+      var sdk = new Wallet();
+      sdk.processExternalPayment(instance_id, {
         request_id: request_id,
         ext_auth_success_uri: "http://lcoalhost:8000",
         ext_auth_fail_uri: "http://localhost:8000"
-      }, processComplete);
-    });
+      }, (error, data, response) => {
+        assert.strictEqual(error, null);
+        assert.strictEqual(response.statusCode, 200);
+        assert.strictEqual(data.status, 'ext_auth_required');
+        done();
 
+      });
+    });
   });
 
   describe("#exceptions", function () {
