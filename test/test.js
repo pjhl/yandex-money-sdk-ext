@@ -15,10 +15,12 @@ describe('Wallet', function () {
     it('should return auth url for browser redirect', function () {
       var scope = ['account-info', 'operation-history'];
       var url = Wallet.buildObtainTokenUrl(clientId, "http://localhost:8000/redirect", scope);
+      assert(!!url);
     });
 
-    it("should exchange code to access token(fake)", function (done) {
-      Wallet.getAccessToken("client id", "code", "redirect uri", null,
+    it("should exchange code to access token (fake)", function (done) {
+      const wallet = new Wallet();
+      wallet.getAccessToken("client id", "code", "redirect uri", null,
         function (error, data, response) {
           assert.equal(response.statusCode, 200);
           done();
@@ -176,17 +178,16 @@ describe("External payment", function () {
 
   describe("#exceptions", function () {
     it("should return TokenError in Wallet.revokeToken", function (done) {
-      var api = new Wallet("somemisspelledtoken");
-      Wallet.revokeToken("somemisspelledtoken", null,
-        function myCallback(error) {
-          assert.equal(error.message, "Token error");
-          done();
-        });
+      var wallet = new Wallet("somemisspelledtoken");
+      wallet.revokeToken((error) => {
+        assert.equal(error.message, "Token error");
+        done();
+      });
     });
 
     it("should return ScopeError", function (done) {
-      var api = new Wallet("some invalid token");
-      api.accountInfo(function myCallback(error) {
+      var wallet = new Wallet("some invalid token");
+      wallet.accountInfo((error) => {
         assert.equal(error.message, "Format error");
         done();
       });

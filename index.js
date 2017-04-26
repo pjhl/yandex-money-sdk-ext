@@ -1,9 +1,9 @@
-var wallet = require("./lib/wallet.js");
-var externalPayment = require("./lib/external_payment.js");
-var base = require("./lib/base.js");
+const Wallet = require("./lib/Wallet.js");
+const externalPayment = require("./lib/external_payment.js");
+const base = require("./lib/base.js");
 
 module.exports = {
-  Wallet: wallet.Wallet,
+  Wallet: Wallet,
   ExternalPayment: externalPayment.ExternalPayment,
   Config: base.Config
 };
