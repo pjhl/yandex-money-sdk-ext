@@ -1,4 +1,5 @@
 module.exports = {
   accessToken: "FILL_ME",
-  clientId: "FILL_ME"
+  clientId: "FILL_ME",
+  proxy: 'http://user:password@localhost:3128' // Leave empty to skip proxy test
 };

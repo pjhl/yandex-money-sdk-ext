@@ -196,4 +196,28 @@ describe('YandexMoneySdk', function () {
       });
     });
   });
+
+  describe("request options", function () {
+    describe("#accountInfo (proxy+userAgent)", function () {
+      // Skip test if proxy not defined
+      before(function () {
+        if (!CONSTANTS.proxy) {
+          this.skip();
+        }
+      });
+
+      it("should return account information", function (done) {
+        const sdk = new YandexMoneySdk(CONSTANTS.accessToken, {
+          userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36',
+          proxy: CONSTANTS.proxy
+        });
+        sdk.accountInfo(function (error, data, response) {
+          assert.strictEqual(error, null);
+          assert(!!data);
+          assert.strictEqual(response.statusCode, 200);
+          done();
+        });
+      });
+    });
+  });
 });
