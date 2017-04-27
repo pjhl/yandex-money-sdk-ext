@@ -26,7 +26,9 @@ describe('YandexMoneySdk', function () {
     it("should return account information", function (done) {
       const sdk = new YandexMoneySdk(CONSTANTS.accessToken);
       sdk.accountInfo(function myCallback(error, data, response) {
-        assert.equal(response.statusCode, 200);
+        assert.strictEqual(error, null);
+        assert(!!data);
+        assert.strictEqual(response.statusCode, 200);
         done();
       });
     });
@@ -37,7 +39,9 @@ describe('YandexMoneySdk', function () {
       const sdk = new YandexMoneySdk(CONSTANTS.accessToken);
       sdk.operationHistory({records: 3}, (error, data, response) => {
         assert.strictEqual(error, null);
+        assert(!!data);
         assert.strictEqual(response.statusCode, 200);
+        console.log(data);
         done();
       });
     });
@@ -88,6 +92,7 @@ describe('YandexMoneySdk', function () {
         assert.equal(data.status, "success");
         assert.strictEqual(error, null);
         assert.strictEqual(data.status, "success");
+        assert.strictEqual(response.statusCode, 200);
         done();
       });
     });
